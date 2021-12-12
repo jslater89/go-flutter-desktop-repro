@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:worker_manager/worker_manager.dart';
 
 
 void main() {
@@ -35,23 +35,18 @@ class MainMenu extends StatefulWidget {
 }
 
 class _MainMenuState extends State<MainMenu> {
-  CrossFadeState _backgroundState = CrossFadeState.showFirst;
-  FocusNode _mainFocus = FocusNode();
-
-  late Timer t;
-
-  late Image image1;
-  late Image image2;
-  late Image image3;
-  late Image image4;
+  final FocusNode _mainFocus = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    Executor().warmUp(isolatesCount: 4);
+
+    compute((_) async {
+      await(Future.delayed(const Duration(days: 365)));
+    }, null);
 
     // Wait a few seconds and try to quit.
-    Future.delayed(const Duration(seconds: 2), () => SystemNavigator.pop());
+    // Future.delayed(const Duration(seconds: 2), () => SystemNavigator.pop());
   }
 
   @override
@@ -62,7 +57,7 @@ class _MainMenuState extends State<MainMenu> {
       child: Stack(
         children: [
           Container(
-            key: Key("bg1"),
+            key: const Key("bg1"),
             height: double.infinity,
             width: double.infinity,
             child: FittedBox(
@@ -73,30 +68,17 @@ class _MainMenuState extends State<MainMenu> {
           Scaffold(
               backgroundColor: Colors.transparent,
               body: Center(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: Colors.brown[300]!.withAlpha(128),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        child: Text("Debug Menu"),
-                        onPressed: () {
-                        },
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        child: Text("Exit"),
-                        onPressed: () {
-                          SystemNavigator.pop();
-                        },
-                      ),
-                      SizedBox(height: MediaQuery.of(context).size.height * 0.2)
-                    ],
-                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      child: const Text("Exit"),
+                      onPressed: () {
+                        SystemNavigator.pop();
+                      },
+                    ),
+                  ],
                 ),
               )
           )
